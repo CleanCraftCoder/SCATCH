@@ -8,6 +8,7 @@ import { fileURLToPath } from "url";
 import ownerRouter from "./routes/ownerRouter.js";
 import userRouter from "./routes/userRouter.js";    
 import productRouter from "./routes/productRouter.js";
+import appRouter from "./routes/app.js";
 
 
 const app = express();
@@ -20,8 +21,9 @@ const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 
+app.use("/", appRouter); //start with appRouter
 app.use("/owner",ownerRouter)
-app.use("/user",userRouter);
+app.use("/users",userRouter);
 app.use("/product",productRouter);
 
 app.listen(3000, () => {
