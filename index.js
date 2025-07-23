@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import db from "./config/mongooseConnection.js";
 import cookieParser from "cookie-parser";
@@ -6,6 +8,7 @@ import { fileURLToPath } from "url";
 import ownerRouter from "./routes/ownerRouter.js";
 import userRouter from "./routes/userRouter.js";    
 import productRouter from "./routes/productRouter.js";
+
 
 const app = express();
 
