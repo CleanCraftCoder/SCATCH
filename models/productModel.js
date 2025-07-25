@@ -4,15 +4,15 @@ const productSchema = mongoose.Schema({
     productName : String,
     email : String,
     price : Number,
-    image : String,
+    image : Buffer,
     discount : {
         type : Number,
         default: 0
     },
-    bgcolor : String,
+    bgColor : String,
     panelColor: String,
     textColor : String
 });
 
-const productModel = mongoose.model("product",productSchema);
-export default productModel;
+const product = mongoose.model("product",productSchema);
+export default product;

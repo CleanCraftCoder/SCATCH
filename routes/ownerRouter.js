@@ -4,7 +4,7 @@ import owner from "../models/ownerModel.js";
 
 const router = express.Router();
 
-router.get("/create", async (req, res) => {
+router.post("/create", async (req, res) => {
   if(process.env.NODE_ENV === "development") {
     let owners = await owner.find();
     if(owners.length > 0) {
@@ -24,9 +24,10 @@ router.get("/create", async (req, res) => {
   }
 });
 
-router.get("/", (req, res) => {
-  // console.log(process.env.NODE_ENV);
-  res.send("Owner Home Page");
+router.get("/admin", (req, res) => {
+  const success = req.flash("success");
+  const error = req.flash("error");
+  res.render("createproducts.ejs",{success, error});
 });
 
 

@@ -27,7 +27,8 @@ const registerUser = async (req, res) => {
     
        const token = generateToken(user);
        res.cookie("token",token);
-      //  res.send("User registered successfully"); //just for checking
+       req.flash("success", "User registered successfully");
+       res.redirect("/");
     }
   })
   })
@@ -36,4 +37,37 @@ const registerUser = async (req, res) => {
   }
 }
 
-export { registerUser };
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      req.flash("error", "User not found");
+      return res.redirect("/");
+    }
+
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (result) {
+        const token = generateToken(user);
+        res.cookie("token", token);
+        req.flash("success", "Logged in successfully");
+        res.redirect("/shop");
+      } else {
+        req.flash("error", "Invalid credentials");
+        res.redirect("/");
+      }
+    });
+    
+  } catch (error) {
+    res.send(error.message);
+  }
+};
+
+const logOutUser = (req, res) => {
+  res.cookie("token", "");
+  req.flash("error", "Logged out successfully");
+  res.redirect("/");
+};
+
+export { registerUser, loginUser, logOutUser };
