@@ -5,8 +5,8 @@ import isLoggedIn from '../middlewares/isLoggedIn.js';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import productModel from '../models/productModel.js';
-import userModel from '../models/userModel.js';
+import Product from '../models/productModel.js';
+import User from '../models/userModel.js';
 import mongoose from 'mongoose';
 import Razorpay from "razorpay";
 
@@ -24,7 +24,7 @@ router.get("/",(req,res)=>{
 
 
 router.get("/shop",isLoggedIn,async (req,res)=>{
-    const products = await productModel.find();
+    const products = await Product.find();
     let success = req.flash("success");
     let error = req.flash("error");
     res.render("shop.ejs",{products, success, error});
@@ -34,7 +34,7 @@ router.get("/shop",isLoggedIn,async (req,res)=>{
 router.get('/cart', isLoggedIn, async (req, res) => {
   try {
     // Always fetch fresh user from DB and populate cart
-    const user = await userModel.findById(req.user._id).populate("cart");
+    const user = await User.findById(req.user._id).populate("cart");
 
     const totalPriceProduct = user.cart.reduce((sum, item) => sum + item.price, 0);
     const totalWithPlatformFee = totalPriceProduct + 20;
@@ -47,7 +47,7 @@ router.get('/cart', isLoggedIn, async (req, res) => {
 
   } catch (error) {
     console.error("Cart loading error:", error);
-    res.status(500).send('Error loading cart');
+    res.status(500).send('Cart is empty');
   }
 });
 
@@ -56,7 +56,7 @@ router.get('/cart', isLoggedIn, async (req, res) => {
 router.post("/checkout", isLoggedIn, async (req, res) => {
   try {
     // Get fresh user and calculate total
-    const user = await userModel.findById(req.user._id).populate("cart");
+    const user = await User.findById(req.user._id).populate("cart");
     const totalPriceProduct = user.cart.reduce((sum, item) => sum + item.price, 0);
     const totalWithPlatformFee = (totalPriceProduct + 20) * 100; // Razorpay expects paise
 
@@ -120,7 +120,7 @@ router.get("/addToCart/:productId", isLoggedIn, async (req, res) => {
       return res.redirect("/shop");
     }
 
-    const user = await userModel.findOne({ email: req.user.email });
+    const user = await User.findOne({ email: req.user.email });
     if (!user) {
       req.flash("error", "User not found in the database");
       return res.redirect("/shop");

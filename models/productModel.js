@@ -14,5 +14,5 @@ const productSchema = mongoose.Schema({
     textColor : String
 });
 
-const product = mongoose.model("product",productSchema);
-export default product;
+const Product = mongoose.model("Product",productSchema);
+export default Product;

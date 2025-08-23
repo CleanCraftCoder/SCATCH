@@ -8,17 +8,17 @@ const userSchema = mongoose.Schema({
     cart : [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "product"
+                ref: "Product"
             }
         ],
     orders : [{
         type : mongoose.Schema.Types.ObjectId,
-        ref : "order"
+        ref : "Order"
     }],
     contact : Number,
     picture : String
 });
 
-const userModel = mongoose.model("user",userSchema);
-export default userModel;
+const User = mongoose.model("User",userSchema);
+export default User;
 

@@ -1,16 +1,15 @@
+import dotenv from "dotenv";
+dotenv.config();
 import mongoose from "mongoose";
-import debug from "debug";
-import config from "config";
 
-const dbgr = debug("development:mongooseConnection");
 
-mongoose.connect(`${config.get("MONGODB_URI")}/SCATCH`)
+mongoose.connect(`${process.env.MONGO_URI}SCATCH`)
 .then(() => {
-    dbgr("Database connected successfully");
+    console.log("Database connected successfully");
 })
 .catch((error) => {
-    dbgr("Database connection failed");
-    dbgr(error);
+    console.error("Database connection failed");
+    console.error(error);
 });
 
 export default mongoose.connection;

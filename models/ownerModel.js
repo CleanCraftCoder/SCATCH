@@ -18,5 +18,5 @@ const ownerSchema = mongoose.Schema({
     gstIn : String
 });
 
-const owner = mongoose.model("owner",ownerSchema);
-export default owner;
+const Owner = mongoose.model("Owner",ownerSchema);
+export default Owner;
