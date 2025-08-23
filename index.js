@@ -12,7 +12,7 @@ import appRouter from "./routes/app.js";
 import flash from "connect-flash";
 import expressSession from "express-session";
 
-
+const PORT = process.env.PORT || 3000
 const app = express();
 
 
@@ -37,7 +37,7 @@ app.use("/owner",ownerRouter)
 app.use("/users",userRouter);
 app.use("/product",productRouter);
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
 
