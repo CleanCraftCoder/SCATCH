@@ -79,9 +79,45 @@
   </div>
   <div class="mt-6 flex justify-end">
     <form action="/checkout" method="POST">
-     <button class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">Buy Now</button>
+     <button id="rzp-button" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">
+    Buy Now
+    </button>
     </form>
   </div>
 </div>
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  document.getElementById('rzp-button').onclick = async function (e) {
+    e.preventDefault();
+
+    const orderRes = await fetch("/checkout", { method: "POST" });
+    const order = await orderRes.json();
+
+    var options = {
+      "key": "<%= RAZORPAY_KEY_ID %>",   // 👈 from backend
+      "amount": order.amount,
+      "currency": order.currency,
+      "name": "SCATCH",
+      "description": "Order Payment",
+      "order_id": order.id,
+      "handler": async function (response) {
+        const verifyRes = await fetch("/verify-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(response)
+        });
+        const result = await verifyRes.json();
+        alert("Payment " + result.status);
+      },
+      "theme": { "color": "#3399cc" }
+    };
+
+    const rzp1 = new Razorpay(options);
+    rzp1.open();
+  }
+</script>
+
 
 <%- include('./partials/footer') %>
