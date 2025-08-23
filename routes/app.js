@@ -96,7 +96,7 @@ router.post("/verify-payment", isLoggedIn, async (req, res) => {
 
     if (generatedSignature === razorpay_signature) {
       // ✅ Success: Clear cart after payment
-      await userModel.findByIdAndUpdate(req.user._id, { $set: { cart: [] } });
+      await User.findByIdAndUpdate(req.user._id, { $set: { cart: [] } });
 
       return res.json({ status: "success" });
     } else {
