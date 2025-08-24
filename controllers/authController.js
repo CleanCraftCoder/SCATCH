@@ -8,6 +8,10 @@ const registerUser = async (req, res) => {
 
     // Registration logic here
   const { fullName, email, password} = req.body;
+  if ([fullName, email, password].some((field) => !field || field.trim() === "")) {
+  req.flash("error", "All fields are required");
+  return res.redirect("/");
+}
 
    let user = await userModel.findOne({email: email});
    if(user){
@@ -40,6 +44,11 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if ([email, password].some((field) => !field || field.trim() === "")) {
+      req.flash("error", "All fields are required");
+      return res.redirect("/");
+    }
 
     const user = await userModel.findOne({ email });
     if (!user) {
